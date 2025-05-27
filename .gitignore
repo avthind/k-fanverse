@@ -1,3 +1,4 @@
 .env
 server/firebaseServiceAccountKey.json
 server/.env
+client/.env

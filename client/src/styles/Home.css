@@ -1,0 +1,46 @@
+.home-container {
+  text-align: center;
+  padding: 4rem 2rem;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(180deg, #fceff9, #f0e7ff);
+  min-height: 100vh;
+}
+
+.home-container h1 {
+  font-size: 2.5rem;
+  color: #7b2cbf;
+}
+
+.home-container h1 span {
+  color: #b5179e;
+}
+
+.home-container p {
+  font-size: 1.2rem;
+  color: #444;
+  margin-top: 1rem;
+}
+
+.cta-buttons {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.cta-buttons button {
+  background-color: #9d4edd;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  color: white;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.cta-buttons button:hover {
+  background-color: #7b2cbf;
+}

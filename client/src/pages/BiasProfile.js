@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './BiasProfile.css';
+import '../styles/BiasProfile.css';
 
 const ALL_GROUPS = [
   "BTS", "BLACKPINK", "TWICE", "LE SSERAFIM", "SEVENTEEN", "EXO", "IVE", "TXT", "NewJeans"
