@@ -1,54 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { getBiasProfile, saveBiasProfile } from '../firebase/firestore';
 import '../styles/BiasProfile.css';
 
-const ALL_GROUPS = [
-  "BTS", "BLACKPINK", "TWICE", "LE SSERAFIM", "SEVENTEEN", "EXO", "IVE", "TXT", "NewJeans"
-];
-
 export default function BiasProfile() {
-  const userId = "demo-user"; // Replace with real auth user ID later
-  const [biases, setBiases] = useState([]);
-  const [saved, setSaved] = useState(false);
+  const { user } = useAuth();
+  const [form, setForm] = useState({ idolName: '', groupName: '', imageUrl: '' });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    axios.get(`/api/users/${userId}/bias`)
-      .then(res => setBiases(res.data.biases))
-      .catch(err => console.error(err));
-  }, []);
+    const fetchProfile = async () => {
+      if (user) {
+        const data = await getBiasProfile(user.uid);
+        if (data) setForm(data);
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+  }, [user]);
 
-  const toggleBias = (group) => {
-    if (biases.includes(group)) {
-      setBiases(biases.filter(b => b !== group));
-    } else {
-      setBiases([...biases, group]);
-    }
-    setSaved(false);
+  const handleChange = (e) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const saveBiases = () => {
-    axios.post(`/api/users/${userId}/bias`, { biases })
-      .then(() => setSaved(true))
-      .catch(err => console.error(err));
+  const handleSave = async () => {
+    setSaving(true);
+    await saveBiasProfile(user.uid, form);
+    setSaving(false);
+    alert('Profile saved!');
   };
+
+  if (loading) return <p>Loading profile...</p>;
 
   return (
-    <div className="bias-container">
-      <h2>🎤 Your Bias Profile</h2>
-      <p>Select your favorite K-pop groups or idols:</p>
-      <div className="group-grid">
-        {ALL_GROUPS.map(group => (
-          <button
-            key={group}
-            className={`group-button ${biases.includes(group) ? 'selected' : ''}`}
-            onClick={() => toggleBias(group)}
-          >
-            {group}
-          </button>
-        ))}
-      </div>
-      <button onClick={saveBiases} className="save-button">💾 Save Biases</button>
-      {saved && <p className="saved-msg">✅ Biases saved!</p>}
+    <div className="bias-profile-container">
+      <h2>💜 My Bias Profile</h2>
+
+      <input type="text" name="idolName" placeholder="Idol Name" value={form.idolName} onChange={handleChange} />
+      <input type="text" name="groupName" placeholder="Group Name" value={form.groupName} onChange={handleChange} />
+      <input type="text" name="imageUrl" placeholder="Image URL (optional)" value={form.imageUrl} onChange={handleChange} />
+
+      <button onClick={handleSave} disabled={saving}>{saving ? 'Saving...' : 'Save Profile'}</button>
+
+      {form.imageUrl && (
+        <div className="preview">
+          <h4>Preview:</h4>
+          <img src={form.imageUrl} alt="Bias" />
+        </div>
+      )}
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import '../styles/Navbar.css';
 import { useAuth } from '../context/AuthContext';
 import { signOut } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth } from '../firebase/firebase';
 
 export default function Navbar() {
   const { user } = useAuth();
